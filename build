@@ -21,15 +21,15 @@ sleep 2
 echo "开始编译..."
 
 N_CORE=$1 #核心数量 ./build 4
-PPATH=/usr/bin 
-GCC=$PPATH/arm-none-eabi-gcc
-LD=$PPATH/arm-none-eabi-ld
+PATH1=/usr/bin
+GCC=$PATH1/arm-linux-gnueabi-gcc-4.9
+LD=$PATH1/arm-linux-gnueabi-ld
 DECONFIG=$2 #deconfig配置 ./build 4 msm8916-deconfig
 
 echo ======================================================================================================
-CROSS_COMPILE=$PPATH/arm-none-eabi-
+CROSS_COMPILE=$PATH1/arm-linux-gnueabi-
 make O=out ARCH=arm CC=${GCC} LD=${LDD} CROSS_COMPILE=${CROSS_COMPILE} ${DECONFIG}
-make O=out ARCH=arm CC=${GCC} CROSS_COMPILE=${CROSS_COMPILE} -j$N_CORE
+make O=out ARCH=arm CC=${GCC} CROSS_COMPILE=${CROSS_COMPILE} -j$N_CORE 2>&1 | tee kernel.log
 
 if [ ! -f "out/arch/arm/boot/zImage" ];then
     echo "编译失败,请重新编译..."
