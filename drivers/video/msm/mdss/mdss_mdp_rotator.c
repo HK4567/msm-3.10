@@ -646,6 +646,7 @@ static void mdss_mdp_rotator_fence_free(struct mdss_mdp_rotator_session *rot)
 	if (rot->rot_sync_pt_data && !rot->fence_release) {
 		atomic_inc(&rot->rot_sync_pt_data->commit_cnt);
 		mdss_fb_signal_timeline(rot->rot_sync_pt_data);
+		rot->fence_release = true;
 	}
 }
 
