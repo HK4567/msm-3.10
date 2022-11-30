@@ -2310,7 +2310,7 @@ long do_mount(const char *dev_name, const char *dir_name,
 		mnt_flags |= MNT_READONLY;
 
 	flags &= ~(MS_NOSUID | MS_NOEXEC | MS_NODEV | MS_ACTIVE | MS_BORN |
-		   MS_NOATIME | MS_NODIRATIME | MS_RELATIME| MS_KERNMOUNT |
+		   MS_NOATIME | MS_NODIRATIME | MS_RELATIME | MS_KERNMOUNT |
 		   MS_STRICTATIME);
 
 	if (flags & MS_REMOUNT)
@@ -2875,7 +2875,7 @@ static int mntns_install(struct nsproxy *nsproxy, void *ns)
 	root.mnt    = &mnt_ns->root->mnt;
 	root.dentry = mnt_ns->root->mnt.mnt_root;
 	path_get(&root);
-	while(d_mountpoint(root.dentry) && follow_down_one(&root))
+	while (d_mountpoint(root.dentry) && follow_down_one(&root))
 		;
 
 	/* Update the pwd and root */
