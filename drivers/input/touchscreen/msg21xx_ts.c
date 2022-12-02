@@ -415,7 +415,6 @@ static int firmware_erase_c33(struct msg21xx_ts_data *ts_data,
 	write_reg_8bit(ts_data, 0x3C, 0x60, 0x55);
 	write_reg_8bit(ts_data, 0x3C, 0x61, 0xAA);
 
-	/* set PROGRAM password */
 	write_reg_8bit(ts_data, 0x16, 0x1A, 0xBA);
 	write_reg_8bit(ts_data, 0x16, 0x1B, 0xAB);
 
