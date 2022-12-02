@@ -113,10 +113,14 @@ enum mdss_mdp_block_type {
 };
 
 enum mdss_mdp_csc_type {
-	MDSS_MDP_CSC_RGB2RGB,
-	MDSS_MDP_CSC_YUV2RGB,
-	MDSS_MDP_CSC_RGB2YUV,
+	MDSS_MDP_CSC_YUV2RGB_601L,
+	MDSS_MDP_CSC_YUV2RGB_601FR,
+	MDSS_MDP_CSC_YUV2RGB_709L,
+	MDSS_MDP_CSC_RGB2YUV_601L,
+	MDSS_MDP_CSC_RGB2YUV_601FR,
+	MDSS_MDP_CSC_RGB2YUV_709L,
 	MDSS_MDP_CSC_YUV2YUV,
+	MDSS_MDP_CSC_RGB2RGB,
 	MDSS_MDP_MAX_CSC
 };
 
@@ -464,6 +468,7 @@ struct mdss_mdp_pipe {
 	struct mdp_scale_data scale;
 	u8 chroma_sample_h;
 	u8 chroma_sample_v;
+	u8 csc_coeff_set;
 };
 
 struct mdss_mdp_writeback_arg {
@@ -729,6 +734,19 @@ static inline u32 left_lm_w_from_mfd(struct msm_fb_data_type *mfd)
 	return (ctl && ctl->mixer_left) ? ctl->mixer_left->width : 0;
 }
 
+static inline uint8_t pp_vig_csc_pipe_val(struct mdss_mdp_pipe *pipe)
+{
+	switch (pipe->csc_coeff_set) {
+	case MDP_CSC_ITU_R_601:
+		return MDSS_MDP_CSC_YUV2RGB_601L;
+	case MDP_CSC_ITU_R_601_FR:
+		return MDSS_MDP_CSC_YUV2RGB_601FR;
+	case MDP_CSC_ITU_R_709:
+	default:
+		return  MDSS_MDP_CSC_YUV2RGB_709L;
+	}
+}
+
 irqreturn_t mdss_mdp_isr(int irq, void *ptr);
 void mdss_mdp_irq_clear(struct mdss_data_type *mdata,
 		u32 intr_type, u32 intf_num);
@@ -931,7 +949,7 @@ void mdss_mdp_crop_rect(struct mdss_rect *src_rect,
 	const struct mdss_rect *sci_rect);
 
 
-int mdss_mdp_wb_kickoff(struct msm_fb_data_type *mfd);
+int mdss_mdp_wb_kickoff(struct msm_fb_data_type *mfd, struct mdss_mdp_commit_cb *commit_cb);
 int mdss_mdp_wb_ioctl_handler(struct msm_fb_data_type *mfd, u32 cmd, void *arg);
 
 int mdss_mdp_get_ctl_mixers(u32 fb_num, u32 *mixer_id);

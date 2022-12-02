@@ -926,6 +926,11 @@ int mdss_mdp_overlay_pipe_setup(struct msm_fb_data_type *mfd,
 	}
 
 	/*
+	 * Populate Color Space.
+	 */
+	if (pipe->src_fmt->is_yuv && (pipe->type == MDSS_MDP_PIPE_TYPE_VIG))
+		pipe->csc_coeff_set = req->color_space;
+	/*
 	 * When scaling is enabled src crop and image
 	 * width and height is modified by user
 	 */
@@ -1529,19 +1534,26 @@ int mdss_mdp_overlay_kickoff(struct msm_fb_data_type *mfd,
 
 	if (mfd->panel.type == WRITEBACK_PANEL) {
 		ATRACE_BEGIN("wb_kickoff");
-		ret = mdss_mdp_wb_kickoff(mfd);
+		 if (!need_cleanup) {
+                      commit_cb.commit_cb_fnc = mdss_mdp_commit_cb;
+                      commit_cb.data = mfd;
+                      ret = mdss_mdp_wb_kickoff(mfd, &commit_cb);
+              } else {
+                      mdss_mdp_wb_kickoff(mfd, NULL);
+              }
 		ATRACE_END("wb_kickoff");
-	} else if (!need_cleanup) {
+
+	} else {
 		ATRACE_BEGIN("display_commit");
+		 if (!need_cleanup) {
 		commit_cb.commit_cb_fnc = mdss_mdp_commit_cb;
 		commit_cb.data = mfd;
 		ret = mdss_mdp_display_commit(mdp5_data->ctl, NULL,
 			&commit_cb);
-		ATRACE_END("display_commit");
 	} else {
-		ATRACE_BEGIN("display_commit");
 		ret = mdss_mdp_display_commit(mdp5_data->ctl, NULL,
 			NULL);
+              }
 		ATRACE_END("display_commit");
 	}
 
