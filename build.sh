@@ -1,13 +1,24 @@
-#!/bin/bash
+##!/bin/bash
+file=out
+
+if [ ! -f "$file" ]; then
+rm -r $file
+else
+:
+fi
 
 mkdir out
 
+GCC=/usr/bin/arm-linux-gnueabi-gcc-4.9
+LDD=/usr/bin/arm-linux-gnueabi-ld
+DECONFIG=pd1510-perf_defconfig
+
 echo ======================================================================================================
-CROSS_COMPILE=/usr/bin/arm-none-eabi-
+CROSS_COMPILE=/usr/bin/arm-linux-gnueabi-
 echo======================================================================================================
-make O=out ARCH=arm CC=/usr/bin/arm-none-eabi-gcc CROSS_COMPILE=${CROSS_COMPILE} vendor/pd1510_defconfig
+make O=out ARCH=arm CC=${GCC} LD=${LDD}CROSS_COMPILE=${CROSS_COMPILE} ${DECONFIG}
 echo ======================================================================================================
-make O=out ARCH=arm CC=/usr/bin/arm-none-eabi-gcc CROSS_COMPILE=${CROSS_COMPILE} -j4
+make O=out ARCH=arm CC=${GCC} CROSS_COMPILE=${CROSS_COMPILE} -j4
 echo ======================================================================================================
-mv out/arch/arm/boot/zImage AnyKernel3/
+# mv out/arch/arm/boot/zImage AnyKernel3/
 echo ======================================================================================================
