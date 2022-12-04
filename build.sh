@@ -3,8 +3,6 @@ file=out
 
 if [ ! -f "$file" ]; then
 rm -r $file
-else
-:
 fi
 
 mkdir out
@@ -20,5 +18,5 @@ make O=out ARCH=arm CC=${GCC} LD=${LDD}CROSS_COMPILE=${CROSS_COMPILE} ${DECONFIG
 echo ======================================================================================================
 make O=out ARCH=arm CC=${GCC} CROSS_COMPILE=${CROSS_COMPILE} -j4
 echo ======================================================================================================
-# mv out/arch/arm/boot/zImage AnyKernel3/
+mv out/arch/arm/boot/zImage AnyKernel3/
 echo ======================================================================================================
