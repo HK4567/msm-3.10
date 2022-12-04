@@ -1,7 +1,12 @@
-##!/bin/bash
+#!/bin/bash
+ 
+now=`date +'%Y-%m-%d %H:%M:%S'`
+start_time=$(date --date="$now" +%s);
+ 
+
 file=out
 
-if [ ! -f "$file" ]; then
+if [  -f "$file" ]; then
 rm -r $file
 fi
 
@@ -20,3 +25,8 @@ make O=out ARCH=arm CC=${GCC} CROSS_COMPILE=${CROSS_COMPILE} -j4
 echo ======================================================================================================
 mv out/arch/arm/boot/zImage AnyKernel3/
 echo ======================================================================================================
+
+
+now=`date +'%Y-%m-%d %H:%M:%S'`
+end_time=$(date --date="$now" +%s);
+echo "used time:"$((end_time-start_time))"s"
