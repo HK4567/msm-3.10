@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -1422,18 +1422,20 @@ static int msm_vdec_queue_setup(struct vb2_queue *q,
 			break;
 		}
 		*num_buffers = max(*num_buffers, bufreq->buffer_count_min);
-        if ((*num_buffers < MIN_NUM_CAPTURE_BUFFERS ||
-              *num_buffers > VB2_MAX_FRAME) &&
-              (inst->fmts[OUTPUT_PORT]->fourcc ==
-               V4L2_PIX_FMT_H264)) {
-             int temp = *num_buffers;
-             *num_buffers = clamp_val(*num_buffers,
-                              MIN_NUM_CAPTURE_BUFFERS,
-                              VB2_MAX_FRAME);
-             dprintk(VIDC_INFO,
-                       "Updating CAPTURE_MPLANE buffer count from %d -> %d\n",
-                       temp, *num_buffers);
-        }    
+
+		if ((*num_buffers < MIN_NUM_CAPTURE_BUFFERS ||
+			*num_buffers > VB2_MAX_FRAME) &&
+			(inst->fmts[OUTPUT_PORT]->fourcc ==
+				V4L2_PIX_FMT_H264)) {
+			int temp = *num_buffers;
+			*num_buffers = clamp_val(*num_buffers,
+					MIN_NUM_CAPTURE_BUFFERS,
+					VB2_MAX_FRAME);
+			dprintk(VIDC_INFO,
+				"Updating CAPTURE_MPLANE buffer count from %d -> %d\n",
+				temp, *num_buffers);
+		}
+
 		if (*num_buffers != bufreq->buffer_count_actual) {
 			property_id = HAL_PARAM_BUFFER_COUNT_ACTUAL;
 			new_buf_count.buffer_type =
