@@ -22,7 +22,7 @@ echo "开始编译..."
 
 N_CORE=$1 #核心数量 ./build 4
 PATH1=/usr/bin
-GCC=$PATH1/arm-linux-gnueabi-gcc-4.9
+GCC=$PATH1/arm-linux-gnueabi-gcc-5
 LD=$PATH1/arm-linux-gnueabi-ld
 DECONFIG=$2 #deconfig配置 ./build 4 msm8916-deconfig
 
