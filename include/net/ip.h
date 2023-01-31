@@ -216,6 +216,14 @@ extern int inet_peer_minttl;
 extern int inet_peer_maxttl;
 
 /* From ip_input.c */
+extern int sysctl_ip_early_demux;
+
+/* From ip_output.c */
+extern int sysctl_ip_dynaddr;
+
+extern void ipfrag_init(void);
+
+extern void ip_static_sysctl_init(void);
 
 #define IP4_REPLY_MARK(net, mark) \
 	((net)->ipv4.sysctl_fwmark_reflect ? (mark) : 0)
@@ -349,14 +357,6 @@ static __inline__ void inet_reset_saddr(struct sock *sk)
 		struct ipv6_pinfo *np = inet6_sk(sk);
 
 		memset(&np->saddr, 0, sizeof(np->saddr));
-		memset(&np->rcv_saddr, 0, sizeof(np->rcv_saddr));
-	}
-#endif
-}
-		memset(&np->rcv_saddr, 0, sizeof(np->rcv_saddr));
-	}
-#endif
-}
 		memset(&np->rcv_saddr, 0, sizeof(np->rcv_saddr));
 	}
 #endif
